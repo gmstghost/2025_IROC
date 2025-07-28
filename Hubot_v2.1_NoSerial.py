@@ -19,12 +19,9 @@
 #
 # 5. Improved debuging output
 
-
-
 import numpy as np
 import cv2
 import serial
-
 
 class Hubot:
     def __init__(self):

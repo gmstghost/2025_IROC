@@ -1,12 +1,10 @@
-  #!/usr/bin/python3
+#!/usr/bin/python3
 
 ### Hubot
 # Version 2.0
 
 ### Patch note
 # 1. First release
-
-
 
 import numpy as np
 import cv2

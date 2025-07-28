@@ -9,6 +9,7 @@ from std_msgs.msg import String
 # 라인 검출 hsv 지정
 MIN_LINE_HSV = np.array([45, 130, 70])
 MAX_LINE_HSV = np.array([75, 255, 220])
+
 # 라인 검출 범위 지정
 LOWER_LINE_MASK_LIMIT = 1
 UPPER_LINE_MASK_LIMIT = 2/3

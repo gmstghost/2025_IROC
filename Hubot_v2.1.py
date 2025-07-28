@@ -28,7 +28,6 @@ import numpy as np
 import cv2
 import serial
 
-
 class Hubot:
     def __init__(self):
         self.ser = serial.Serial(port="COM7",
