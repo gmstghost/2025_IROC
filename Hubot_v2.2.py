@@ -3,6 +3,11 @@
 ### Hubot
 # Version 2.2
 
+### Copyright
+# Code 손민준, 김동연, 배준형
+# Annotate 안제욱
+# Help 이승민
+
 ### Patch note
 # 1. Improved exception handling
 #      serial port open failure
