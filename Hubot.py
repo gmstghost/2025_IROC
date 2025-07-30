@@ -10,13 +10,14 @@
 # Annotate 안제욱
 # Help 이승민
 
+# 각종 Module 호출
 import numpy as np
 import cv2
 import serial 
 import logging
 from collections import deque
 
-from Selector import Selector
+from Selector import Selector       # Selector.py 클래스 호출
 
 
 class Hubot:
