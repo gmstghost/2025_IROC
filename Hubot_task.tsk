@@ -1,10 +1,11 @@
-version 3.00
+﻿version 3.00
 cm_version 1.0
 platform CM-530
 o main
 o begin
 o load param_dest:motion:1:50 param_src:dec_num:2
 o wait param_src:motion:1:51 lop:== param_src:bool_num:1 rop:then
+- 
 o while(1)
 o begin
 o wait param_src:cm:2 lop:== param_src:bool_num:0 rop:then
@@ -16,14 +17,14 @@ o wait param_src:motion:1:51 lop:== param_src:bool_num:1 rop:then
 o end
 - 
 o compute param_dest:motion:3:52 param_src:var:data aop:- param_src:dec_num:75
+- 
 o load param_dest:motion:1:50 param_src:dec_num:111
 o wait param_src:motion:1:51 lop:== param_src:bool_num:1 rop:then
+- 
 o load param_dest:motion:3:52 param_src:dec_num:0
 - 
 o load param_dest:motion:1:50 param_src:dec_num:112
 o wait param_src:motion:1:51 lop:== param_src:bool_num:1 rop:then
-- 
-- 
 - 
 o wait param_src:cm:2 lop:== param_src:bool_num:0 rop:then
 o load param_dest:var:data param_src:cm:1
@@ -34,8 +35,10 @@ o wait param_src:motion:1:51 lop:== param_src:bool_num:1 rop:then
 o end
 - 
 o compute param_dest:motion:4:52 param_src:var:data aop:- param_src:dec_num:75
+- 
 o load param_dest:motion:1:50 param_src:dec_num:113
 o wait param_src:motion:1:51 lop:== param_src:bool_num:1 rop:then
+- 
 o load param_dest:motion:4:52 param_src:dec_num:0
 - 
 o load param_dest:motion:1:50 param_src:dec_num:114
