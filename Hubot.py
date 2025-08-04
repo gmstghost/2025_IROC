@@ -44,11 +44,11 @@ class Hubot:
         self.MIN_OBJECT_HSV = np.array([100, 100, 50])
         self.MAX_OBJECT_HSV = np.array([160, 255, 150])
 
-        self.UPPER_LINE_MASK_LIMIT = 0.25
-        self.LOWER_LINE_MASK_LIMIT = 1.00
-        self.CURRENT_LINE_POS = 1.25
-        self.UPPER_OBJECT_MASK_LIMIT = 0.25
-        self.LOWER_OBJECT_MASK_LIMIT = 0.50
+        self.UPPER_LINE_MASK_LIMIT = 0.4
+        self.LOWER_LINE_MASK_LIMIT = 1.0
+        self.CURRENT_LINE_POS = 1.5
+        self.UPPER_OBJECT_MASK_LIMIT = 0.45
+        self.LOWER_OBJECT_MASK_LIMIT = 0.5
 
         self.TURN_RANGE = 60
 
@@ -75,7 +75,7 @@ class Hubot:
 
 
     def get_offset(self, theta, offset_limit=75):
-        offset = int(theta * 0.75)
+        offset = int(theta * 0.7)
         if offset <= -offset_limit:
             return 0
         if offset >= offset_limit:
@@ -120,11 +120,11 @@ class Hubot:
         # Line detected
         elif line_hulls:
             line_hull = line_hulls[0]
-            line_pos = tr.sel_contour_distance_point(line_hull, (None, self.cam_h))
+            line_pos = tr.sel_contour_distance_point(line_hull, (self.cam_w/2, self.cam_h))
 
             cv2.drawContours(dst, line_hulls, -1, (0, 255, 255), 1)
             cv2.drawContours(dst, [line_hull], -1, (0, 255, 255), 3)
-            cv2.line(dst, (int(self.cam_w/2), int(self.cam_h*self.CURRENT_LINE_POS)), line_pos, (0, 255, 255), 1)
+            cv2.line(dst, (int(self.cam_w/2), int(self.cam_h*self.CURRENT_LINE_POS)), line_pos, (0, 255, 255), 3)
 
             theta = self.get_theta((self.cam_w/2, self.cam_h*self.CURRENT_LINE_POS), line_pos)
             if theta < -self.TURN_RANGE:
