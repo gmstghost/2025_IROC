@@ -3,7 +3,7 @@ cm_version 1.0
 platform CM-530
 o main
 o begin
-o load param_dest:var:LR_balance param_src:dec_num:0
+o load param_dest:var:LR_balance param_src:dec_num:-3
 o load param_dest:var:WF_balance param_src:dec_num:0
 o call faddr_dest:apply_offset
 - 
@@ -89,14 +89,20 @@ o if param_src:cm:2 lop:== param_src:bool_num:0 rop:then
 o begin
 o if param_src:var:backup_data lop:> param_src:dec_num:75 rop:then
 o begin
+o for param_var:i param_src:dec_num:0 param_src:dec_num:2
+o begin
 o load param_dest:motion:1:50 param_src:dec_num:13
 o wait param_src:motion:1:51 lop:== param_src:bool_num:1 rop:then
 o end
+o end
 - 
-o elseif param_src:var:backup_data lop:< param_src:dec_num:75 rop:then
+o if param_src:var:backup_data lop:< param_src:dec_num:75 rop:then
+o begin
+o for param_var:i param_src:dec_num:0 param_src:dec_num:2
 o begin
 o load param_dest:motion:1:50 param_src:dec_num:12
 o wait param_src:motion:1:51 lop:== param_src:bool_num:1 rop:then
+o end
 o end
 o end
 o end
