@@ -45,9 +45,10 @@ class Hubot:
         self.MIN_OBJECT_HSV = np.array([100, 100, 50])
         self.MAX_OBJECT_HSV = np.array([160, 255, 150])
 
-        self.UPPER_LINE_MASK_LIMIT = 0.15
-        self.LOWER_LINE_MASK_LIMIT = 1.00
-        self.CURRENT_LINE_POS = 1.25
+        self.UPPER_LINE_MASK_LIMIT = 0.4
+        self.LOWER_LINE_MASK_LIMIT = 1.0
+        
+        self.CURRENT_LINE_POS = 1.5
 
         self.UPPER_OBJECT_MASK_LIMIT = 0.50
         self.LOWER_OBJECT_MASK_LIMIT = 1.00
