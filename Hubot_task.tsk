@@ -3,7 +3,7 @@ cm_version 1.0
 platform CM-530
 o main
 o begin
-o load param_dest:var:LR_balance param_src:dec_num:-3
+o load param_dest:var:LR_balance param_src:dec_num:0
 o load param_dest:var:WF_balance param_src:dec_num:0
 o call faddr_dest:apply_offset
 - 
@@ -11,11 +11,8 @@ o call faddr_dest:apply_offset
 o load param_dest:motion:1:50 param_src:dec_num:2
 o wait param_src:motion:1:51 lop:== param_src:bool_num:1 rop:then
 - 
-- 
 o while(1)
 o begin
-o call faddr_dest:RA_nodetect
-- 
 o wait param_src:cm:2 lop:== param_src:bool_num:0 rop:then
 o load param_dest:var:received_data param_src:cm:1
 o if param_src:var:received_data lop:>= param_src:dec_num:251 rop:then
@@ -32,8 +29,8 @@ o load param_dest:motion:1:50 param_src:dec_num:7
 o wait param_src:motion:1:51 lop:== param_src:bool_num:1 rop:then
 o load param_dest:motion:3:52 param_src:dec_num:0
 o end
+o call faddr_dest:return_motion
 - 
-o call faddr_dest:RA_nodetect
 - 
 o wait param_src:cm:2 lop:== param_src:bool_num:0 rop:then
 o load param_dest:var:received_data param_src:cm:1
@@ -51,6 +48,7 @@ o load param_dest:motion:1:50 param_src:dec_num:9
 o wait param_src:motion:1:51 lop:== param_src:bool_num:1 rop:then
 o load param_dest:motion:4:52 param_src:dec_num:0
 o end
+o call faddr_dest:return_motion
 o end
 o end
 o function faddr_src:apply_offset
@@ -61,6 +59,29 @@ o compute param_dest:motion:9:52 param_src:var:LR_balance aop:* param_src:dec_nu
 o compute param_dest:motion:10:52 param_src:var:LR_balance aop:* param_src:dec_num:2
 o compute param_dest:motion:11:52 param_src:dec_num:0 aop:- param_src:var:LR_balance
 o compute param_dest:motion:12:52 param_src:dec_num:0 aop:- param_src:var:LR_balance
+o end
+o function faddr_src:return_motion
+o begin
+o for param_var:_ param_src:dec_num:1 param_src:dec_num:5
+o begin
+o if param_src:cm:2 lop:== param_src:bool_num:1 rop:then
+o begin
+o return
+o end
+- 
+o if param_src:var:received_data lop:< param_src:dec_num:75 rop:then
+o begin
+o load param_dest:motion:1:50 param_src:dec_num:12
+o wait param_src:motion:1:51 lop:== param_src:bool_num:1 rop:then
+o end
+o elseif param_src:var:received_data lop:> param_src:dec_num:75 rop:then
+o begin
+o load param_dest:motion:1:50 param_src:dec_num:13
+o wait param_src:motion:1:51 lop:== param_src:bool_num:1 rop:then
+o end
+o load param_dest:cm:6 param_src:hrtimer_num:100
+o wait param_src:cm:6 lop:> param_src:hrtimer_num:0 rop:then
+o end
 o end
 o function faddr_src:exceptional_motion
 o begin
@@ -78,31 +99,5 @@ o elseif param_src:var:received_data lop:== param_src:dec_num:255 rop:then
 o begin
 o load param_dest:motion:1:50 param_src:dec_num:16
 o wait param_src:motion:1:51 lop:== param_src:bool_num:1 rop:then
-o end
-o end
-- 
-o function faddr_src:RA_nodetect
-o begin
-o load param_dest:var:backup_data param_src:var:received_data
-- 
-o if param_src:cm:2 lop:== param_src:bool_num:0 rop:then
-o begin
-o if param_src:var:backup_data lop:> param_src:dec_num:75 rop:then
-o begin
-o for param_var:i param_src:dec_num:0 param_src:dec_num:2
-o begin
-o load param_dest:motion:1:50 param_src:dec_num:13
-o wait param_src:motion:1:51 lop:== param_src:bool_num:1 rop:then
-o end
-o end
-- 
-o if param_src:var:backup_data lop:< param_src:dec_num:75 rop:then
-o begin
-o for param_var:i param_src:dec_num:0 param_src:dec_num:2
-o begin
-o load param_dest:motion:1:50 param_src:dec_num:12
-o wait param_src:motion:1:51 lop:== param_src:bool_num:1 rop:then
-o end
-o end
 o end
 o end

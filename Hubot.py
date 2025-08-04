@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 
 ### Hubot
-# Version 2.11.0
+# Version 2.11.3
 
 ### Patch note
 
@@ -38,19 +38,23 @@ class Hubot:
 
         self.MIN_DETECT_WIDTH = 30
         self.MIN_DETECT_HEIGHT = 10
+        self.MIN_DETECT_AREA = 5000
 
         self.MIN_LINE_HSV = np.array([20, 50, 100])
         self.MAX_LINE_HSV = np.array([30, 230, 230])
         self.MIN_OBJECT_HSV = np.array([100, 100, 50])
         self.MAX_OBJECT_HSV = np.array([160, 255, 150])
 
-        self.UPPER_LINE_MASK_LIMIT = 0.4
-        self.LOWER_LINE_MASK_LIMIT = 1.0
-        self.CURRENT_LINE_POS = 1.5
-        self.UPPER_OBJECT_MASK_LIMIT = 0.45
-        self.LOWER_OBJECT_MASK_LIMIT = 0.5
+        self.UPPER_LINE_MASK_LIMIT = 0.15
+        self.LOWER_LINE_MASK_LIMIT = 1.00
+        self.CURRENT_LINE_POS = 1.25
 
-        self.TURN_RANGE = 60
+        self.UPPER_OBJECT_MASK_LIMIT = 0.50
+        self.LOWER_OBJECT_MASK_LIMIT = 1.00
+        self.LEFT_OBJECT_MASK_LIMIT = 0.15
+        self.RIGHT_OBJECT_MASK_LIMIT = 0.85
+
+        self.TURN_RANGE = 65
 
 
 
@@ -75,7 +79,7 @@ class Hubot:
 
 
     def get_offset(self, theta, offset_limit=75):
-        offset = int(theta * 0.7)
+        offset = int(theta * 0.75)
         if offset <= -offset_limit:
             return 0
         if offset >= offset_limit:
@@ -100,9 +104,10 @@ class Hubot:
         line_mask[int(self.cam_h*self.LOWER_LINE_MASK_LIMIT):, :] = 0
         object_mask[:int(self.cam_h*self.UPPER_OBJECT_MASK_LIMIT), :] = 0
         object_mask[int(self.cam_h*self.LOWER_OBJECT_MASK_LIMIT):, :] = 0
+        object_mask[:, :int(self.cam_w*self.LEFT_OBJECT_MASK_LIMIT)] = 0
+        object_mask[:, int(self.cam_w*self.RIGHT_OBJECT_MASK_LIMIT):] = 0
 
-        line_hulls = tr.extract_convexHulls(line_mask)
-        # line_hulls = tr.extract_approxPolyDP(line_mask, 0.005)
+        line_hulls = tr.extract_convexHulls(line_mask, min_area=self.MIN_DETECT_AREA)
         line_hulls = tr.sort_contour_area(line_hulls)
         object_rects = tr.extract_rects(object_mask, min_w=self.MIN_DETECT_WIDTH, min_h=self.MIN_DETECT_HEIGHT)
         object_rects = tr.sort_rect_distance_point(object_rects, (self.cam_w/2, None))
@@ -120,11 +125,11 @@ class Hubot:
         # Line detected
         elif line_hulls:
             line_hull = line_hulls[0]
-            line_pos = tr.sel_contour_distance_point(line_hull, (self.cam_w/2, self.cam_h))
+            line_pos = tr.sel_contour_distance_point(line_hull, (self.cam_w/2, self.cam_h*self.CURRENT_LINE_POS), 2)
 
             cv2.drawContours(dst, line_hulls, -1, (0, 255, 255), 1)
             cv2.drawContours(dst, [line_hull], -1, (0, 255, 255), 3)
-            cv2.line(dst, (int(self.cam_w/2), int(self.cam_h*self.CURRENT_LINE_POS)), line_pos, (0, 255, 255), 3)
+            cv2.line(dst, (int(self.cam_w/2), int(self.cam_h*self.CURRENT_LINE_POS)), line_pos, (0, 255, 255), 1)
 
             theta = self.get_theta((self.cam_w/2, self.cam_h*self.CURRENT_LINE_POS), line_pos)
             if theta < -self.TURN_RANGE:

@@ -1,3 +1,4 @@
+import numpy as np
 import cv2
 
 from .calc_utils import *
@@ -30,5 +31,6 @@ def sort_contour_area(contours):
 
 
 # contour select function
-def sel_contour_distance_point(contour, pos):
-    return max(contour[:, 0, :], key=lambda p: distance(p, pos))
+def sel_contour_distance_point(contour, pos, num=1):
+    pos = sorted(contour[:, 0, :], key=lambda p: distance(p, pos), reverse=True)
+    return tuple(map(int, np.average(pos[:num], axis=0)))
